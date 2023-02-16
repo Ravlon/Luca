@@ -33,6 +33,7 @@ class LucaLogger(logging.Logger):
     def new_stream(self) -> None:
         handle = logging.StreamHandler(sys.stdout)
         handle.setFormatter(HUMAN_FORMAT)
+        handle.setLevel(logging.INFO)
         self.addHandler(handle)
         
     def new_file(self, file) -> None:
