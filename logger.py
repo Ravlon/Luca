@@ -2,9 +2,10 @@ import datetime
 import logging
 from logging.handlers import TimedRotatingFileHandler
 from tglogging import TelegramLogHandler #disinstall if you ever get around doing your own
+import sys
 
 DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z" #ISO-8601 format in UTC
-HUMAN_FORMAT = logging.Formatter("[%(asctime)-25s %(msecs)dms] <%(levelname)-8s> >>%(filename)-20s:%(funcName)-20s # %(message)s", datefmt=DATE_FORMAT)
+HUMAN_FORMAT = logging.Formatter("%(name)-8s: [%(asctime)-24s %(msecs)dms] <%(levelname)-8s> %(filename)-10s: %(funcName)-10s #%(message)s", datefmt=DATE_FORMAT)
 MACHINE_FORMAT = ...
 
 class LucaFileHandler(logging.FileHandler):
@@ -26,9 +27,14 @@ class LucaTelegramStream(TelegramLogHandler):
         self.setLevel(logging.WARNING)
 
 class LucaLogger(logging.Logger):
-    def __init__(self) -> None:
-        self.setLevel(logging.DEBUG)
+    def __init__(self,name) -> None:
+        super().__init__(name,logging.DEBUG)
 
+    def new_stream(self) -> None:
+        handle = logging.StreamHandler(sys.stdout)
+        handle.setFormatter(HUMAN_FORMAT)
+        self.addHandler(handle)
+        
     def new_file(self, file) -> None:
         handle = LucaFileHandler(file)
         self.addHandler(handle)
