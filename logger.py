@@ -12,7 +12,7 @@ class LucaFileHandler(logging.FileHandler):
     def __init__(self,file) -> None:
         super().__init__(file)
         self.setFormatter(HUMAN_FORMAT)
-        self.setLevel(logging.INFO)
+        self.setLevel(logging.DEBUG)
 
 class LucaTimeRotator(TimedRotatingFileHandler):
     def __init__(self, filename: str, when: str = "D", interval: int = 1, backupCount: int = 7, encoding: str | None = None, delay: bool = False, utc: bool = False, atTime: datetime.time | None = datetime.time(2,0,0), errors: str | None = None) -> None:
